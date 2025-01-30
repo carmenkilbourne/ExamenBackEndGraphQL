@@ -3,18 +3,20 @@ import { schema } from "./schema.ts";
 import { MongoClient } from "mongodb";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { resolvers } from "./resolvers.ts";
-import { PartModel, VehicleModel } from "./types.ts";
 
 const MONGO_URL = "mongodb+srv://ckilbourne:12345@nebrija-cluster.cumaf.mongodb.net/?retryWrites=true&w=majority&appName=Nebrija-Cluster";
-
+if (!MONGO_URL) {
+  throw new Error("Please provide a MONGO_URL");
+}
 const mongoClient = new MongoClient(MONGO_URL);
 await mongoClient.connect();
 
+console.info("Connected to MongoDB");
 
 const client = new MongoClient(MONGO_URL);
-const db = client.db("graphql");
-//const vehiclesCollection = db.collection<VehicleModel>("vehiculos");
-//const partsCollection = db.collection<PartModel>("parts");
+const db = client.db("ExamenGQL");
+//const testCollection = db.collection<testModel>("test");
+
 
 const server = new ApolloServer({
   typeDefs: schema,
@@ -22,7 +24,7 @@ const server = new ApolloServer({
 });
 
 const { url } = await startStandaloneServer(server, {
- // context: async () => ({ vehiclesCollection,partsCollection}),
+ // context: async () => ({ testCollection}),
 });
 
 
