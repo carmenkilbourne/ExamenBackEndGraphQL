@@ -1,8 +1,10 @@
+// deno-lint-ignore-file require-await
 import { ApolloServer } from "@apollo/server";
 import { schema } from "./schema.ts";
 import { MongoClient } from "mongodb";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { resolvers } from "./resolvers.ts";
+import { RestauranteModel } from "./types.ts";
 
 const MONGO_URL = "mongodb+srv://ckilbourne:12345@nebrija-cluster.cumaf.mongodb.net/?retryWrites=true&w=majority&appName=Nebrija-Cluster";
 if (!MONGO_URL) {
@@ -15,7 +17,7 @@ console.info("Connected to MongoDB");
 
 const client = new MongoClient(MONGO_URL);
 const db = client.db("ExamenGQL");
-//const testCollection = db.collection<testModel>("test");
+const restauranteCollection = db.collection<RestauranteModel>("restaurante");
 
 
 const server = new ApolloServer({
@@ -24,7 +26,7 @@ const server = new ApolloServer({
 });
 
 const { url } = await startStandaloneServer(server, {
- // context: async () => ({ testCollection}),
+ context: async () =>  ({ restauranteCollection}),
 });
 
 
