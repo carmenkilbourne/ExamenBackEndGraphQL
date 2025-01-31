@@ -99,7 +99,6 @@ export const resolvers = {
             if(datos.status !== 200) throw new GraphQLError("no se ha podido conectar con la API telefono");
             const resultado:APIPhone =await datos.json();//obtengo datos
             if(!resultado.is_valid) throw new GraphQLError("El telefono no es valido");
-            const timezone = resultado.timezones[0];
             const city =parent.ciudad;
             //const urlTime =`https://api.api-ninjas.com/v1/worldtime?city=${timezone}`;
             const urlTime =`https://api.api-ninjas.com/v1/city?name=${city}`;
@@ -108,16 +107,17 @@ export const resolvers = {
                     "X-Api-Key":API_KEY
                 }
             });
-            if(datosLat.status !== 200) throw new GraphQLError("no se ha podido conectar con la API tiempo");
+            if(datosLat.status !== 200) throw new GraphQLError("no se ha podido conectar con la API latitud,longitud");
             const latlong:LongLat = await datosLat.json();
-            const latitud = latlong.latitude;
-            const longitude = latlong.longitude;
-            const urlTimer =`https://api.api-ninjas.com/v1/worldtime?lat=${latitud}lon=${longitude})`;
+            const lat = latlong.latitude;
+            const lon = latlong.longitude;
+            const urlTimer =`https://api.api-ninjas.com/v1/worldtime?lat=${lat}&lon=${lon})`; //no se encadenar las dos solicitudes
             const datosTime=await fetch(urlTimer,{
                 headers:{
                     "X-Api-Key":API_KEY
                 }
             });
+            console.log(urlTimer);
             if(datosTime.status !== 200) throw new GraphQLError("no se ha podido conectar con la API tiempo");
             const timeVar:APITime = await datosTime.json();
             const time = timeVar.hour;
