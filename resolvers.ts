@@ -100,14 +100,13 @@ export const resolvers = {
             const resultado:APIPhone =await datos.json();//obtengo datos
             if(!resultado.is_valid) throw new GraphQLError("El telefono no es valido");
             const city =parent.ciudad;
-            //const urlTime =`https://api.api-ninjas.com/v1/worldtime?city=${timezone}`;
             const urlTime =`https://api.api-ninjas.com/v1/city?name=${city}`;
             const datosLat =await fetch(urlTime,{
                 headers:{
                     "X-Api-Key":API_KEY
                 }
             });
-            if(datosLat.status !== 200) throw new GraphQLError("no se ha podido conectar con la API latitud,longitud");
+            //if(datosLat.status !== 200) throw new GraphQLError("no se ha podido conectar con la API latitud,longitud");
             const latlong:LongLat = await datosLat.json();
             const lat = latlong.latitude;
             const lon = latlong.longitude;

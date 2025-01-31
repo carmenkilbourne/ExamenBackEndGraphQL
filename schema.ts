@@ -10,7 +10,7 @@ type Restaurant{
 }
 type Query{
     getRestaurants:[Restaurant!]!
-    getRestaurant(id:ID!):[Restaurant!]!
+    getRestaurant(id:ID!):Restaurant
 }
 type Mutation{
     addRestaurant(name:String!,direccion:String!, ciudad:String!,telefono:String!):Restaurant
